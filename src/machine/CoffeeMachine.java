@@ -3,40 +3,62 @@ package machine;
 import java.util.Scanner;
 
 public class CoffeeMachine {
-    static final int WATER_EACH_CUP = 200; //ml
-    static final int MILK_EACH_CUP = 50; //ml
-    static final int COFFEE_BEANS_EACH_CUP = 15; //g
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Write how many ml of water the coffee machine has:");
-        int availableWater = scanner.nextInt();
-        System.out.println("Write how many ml of milk the coffee machine has:");
-        int availableMilk = scanner.nextInt();
-        System.out.println("Write how many grams of coffee beans the coffee machine has:");
-        int availableCoffeeBeans = scanner.nextInt();
-        System.out.println("Write how many cups of coffee you will need:");
-        int wantedCoffeeCups = scanner.nextInt();
+        Machine.showMachineState();
+        System.out.println("\nWrite action (buy, fill, take):");
+        String action = scanner.next();
+        switch (action) {
+            case "buy":
+                buyMenu(scanner);
+                break;
+            case "fill":
+                fillMenu(scanner);
+                break;
+            case "take":
+                takeMenu();
+                break;
+            default:
+                System.out.println("Invalid option.");
+        }
+        System.out.println();
+        Machine.showMachineState();
+    }
 
-        // Check how many cups the machine can make:
-        int possibleCups = getPossibleCoffeeCups(availableWater, availableMilk, availableCoffeeBeans);
-        if (possibleCups == wantedCoffeeCups) {
-            System.out.println("Yes, I can make that amount of coffee");
-        } else if (possibleCups > wantedCoffeeCups) {
-            System.out.println("Yes, I can make that amount of coffee (and even " + (possibleCups - wantedCoffeeCups) +" more than that)");
-        } else {
-            System.out.println("No, I can make only " + possibleCups + " cup(s) of coffee");
+    //Action Menu
+    public static void buyMenu(Scanner scanner) {
+        System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:");
+        int coffeeChoice = scanner.nextInt();
+        switch (coffeeChoice) {
+            case 1:
+                Machine.makeEspresso();
+                break;
+            case 2:
+                Machine.makeLatte();
+                break;
+            case 3:
+                Machine.makeCappuccino();
+                break;
+            default:
+                System.out.println("Invalid option.");
         }
     }
 
-    public static int getPossibleCoffeeCups(int availableWater, int availableMilk, int availableCoffeeBeans) {
-        int possibleCupsByBeans = availableCoffeeBeans / COFFEE_BEANS_EACH_CUP;
-        int possibleCupsByMilk = availableMilk / MILK_EACH_CUP;
-        int possibleCupsByWater = availableWater / WATER_EACH_CUP;
-
-        return Math.min(possibleCupsByBeans,
-                Math.min(possibleCupsByMilk, possibleCupsByWater));
+    public static void fillMenu(Scanner scanner) {
+        System.out.println("Write how many ml of water you want to add:");
+        int waterToAdd = scanner.nextInt();
+        System.out.println("Write how many ml of milk you want to add:");
+        int milkToAdd = scanner.nextInt();
+        System.out.println("Write how many grams of coffee beans you want to add:");
+        int coffeeBeansToAdd = scanner.nextInt();
+        System.out.println("Write how many disposable cups you want to add:");
+        int disposableCupsToAdd = scanner.nextInt();
+        Machine.fillItems(waterToAdd, milkToAdd, coffeeBeansToAdd, disposableCupsToAdd);
     }
 
+    public static void takeMenu() {
+        System.out.println("I gave you $" + Machine.showMoneyAmount());
+        Machine.takeMoney();
+    }
 }
