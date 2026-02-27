@@ -1,24 +1,46 @@
 package machine;
 
 public class Machine {
+    private State currentState;
 
-    private static int water = 400; // id: -1
-    private static int milk = 540; // id: -2
-    private static int coffeeBeans = 120; // id: -3
-    private static int disposableCups = 9; // id: -4
-    private static int money = 550;
+    private int cupsMade = 0;
 
-    //Take
-    public static void takeMoney() {
-        money -= money;
+    private int water;
+    private int milk;
+    private int coffeeBeans;
+    private int disposableCups;
+    private int money;
+
+    public Machine() {
+        water = 400;
+        milk = 540;
+        coffeeBeans = 120;
+        disposableCups = 9;
+        money = 550;
+        currentState = State.CHOOSING_ACTION;
     }
 
-    public static int showMoneyAmount() {
-        return money;
+    //Process
+    public String processInput(String input) {
+        return currentState.handleState(this, input);
+    }
+
+    public void setState(State newState) {
+        currentState = newState;
+    }
+
+    //Clean
+    public void cleanMachine() {
+        cupsMade = 0;
+    }
+
+    //Take
+    public void takeMoney() {
+        money = 0;
     }
 
     //Fill
-    public static void fillItems(int waterToAdd, int milkToAdd, int coffeeBeansToAdd, int disposableCupsToAdd) {
+    public void fillItems(int waterToAdd, int milkToAdd, int coffeeBeansToAdd, int disposableCupsToAdd) {
         water += waterToAdd;
         milk += milkToAdd;
         coffeeBeans += coffeeBeansToAdd;
@@ -26,79 +48,48 @@ public class Machine {
     }
 
     //Buy
-    public static int makeEspresso() {
-        if ((water >= 250) && (coffeeBeans >= 16) && (disposableCups >= 1)) {
-            water -= 250;
-            coffeeBeans -= 16;
-            disposableCups -= 1;
-            money += 4;
-            return 1;
-        } else if (water < 250) {
-            return -1;
-        } else if (coffeeBeans < 16) {
-            return -3;
+    public String makeCoffee(Coffee typeOfCoffee) {
+        if ((water >= typeOfCoffee.getWater()) && (milk >= typeOfCoffee.getMilk()) && (coffeeBeans >= typeOfCoffee.getCoffeeBeans()) && (disposableCups >= typeOfCoffee.getDisposableCups())) {
+            water -= typeOfCoffee.getWater();
+            milk -= typeOfCoffee.getMilk();
+            coffeeBeans -= typeOfCoffee.getCoffeeBeans();
+            disposableCups -= typeOfCoffee.getDisposableCups();
+            money += typeOfCoffee.getMoney();
+            cupsMade++;
+            return "I have enough resources, making you a coffee!";
+        } else if (water < typeOfCoffee.getWater()) {
+            return "Sorry, not enough water!";
+        } else if (milk < typeOfCoffee.getMilk()) {
+            return "Sorry, not enough milk!";
+        } else if (coffeeBeans < typeOfCoffee.getCoffeeBeans()) {
+            return "Sorry, not enough coffee beans";
         } else {
-            return -4;
-        }
-    }
-
-    public static int makeLatte() {
-        if ((water >= 350) && (milk >= 75) && (coffeeBeans >= 20) && (disposableCups >= 1)) {
-            water -= 350;
-            milk -= 75;
-            coffeeBeans -= 20;
-            disposableCups -= 1;
-            money += 7;
-            return 1;
-        } else if (water < 350) {
-            return -1;
-        } else if (milk < 75) {
-            return -2;
-        } else if (coffeeBeans < 20) {
-            return -3;
-        } else {
-            return -4;
-        }
-    }
-
-    public static int makeCappuccino() {
-        if ((water >= 200) && (milk >= 100) && (coffeeBeans >= 12) && (disposableCups >= 1)) {
-            water -= 200;
-            milk -= 100;
-            coffeeBeans -= 12;
-            disposableCups -= 1;
-            money += 6;
-            return 1;
-        } else if (water < 200) {
-            return -1;
-        } else if (milk < 100) {
-            return -2;
-        } else if (coffeeBeans < 12) {
-            return -3;
-        } else {
-            return -4;
+            return "Sorry, not enough disposable cups!";
         }
     }
 
     //Get Resources
-    public static int getWater() {
+    public int getWater() {
         return water;
     }
-
-    public static int getMilk() {
+    public int getMilk() {
         return milk;
     }
 
-    public static int getCoffeeBeans() {
+    public int getCoffeeBeans() {
         return coffeeBeans;
     }
 
-    public static int getDisposableCups() {
+    public int getDisposableCups() {
         return disposableCups;
     }
 
-    public static int getMoney() {
+    public int getMoney() {
         return money;
+    }
+
+    public int getCupsMade() {
+        return cupsMade;
     }
 
 }
