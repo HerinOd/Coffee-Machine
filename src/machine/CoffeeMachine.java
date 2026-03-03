@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class CoffeeMachine {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
         Machine machine = new Machine();
 
         System.out.println("Write action (buy, fill, take, clean, remaining, exit):");
@@ -12,7 +13,9 @@ public class CoffeeMachine {
         while (true) {
             String input = scanner.next();
 
-            if (input.equals("exit")) {
+            System.out.println();
+
+            if ((input.equals("exit") && (machine.getCurrentState().equals(State.CHOOSING_ACTION)))) {
                 return;
             } else {
                 System.out.println(machine.processInput(input));

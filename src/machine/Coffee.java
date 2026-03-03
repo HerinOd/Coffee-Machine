@@ -19,23 +19,23 @@ public enum Coffee {
         this.money = money;
     }
 
-    public int getWater() {
+    public int getWaterNeeded() {
         return water;
     }
 
-    public int getMilk() {
+    public int getMilkNeeded() {
         return milk;
     }
 
-    public int getCoffeeBeans() {
+    public int getCoffeeBeansNeeded() {
         return coffeeBeans;
     }
 
-    public int getDisposableCups() {
+    public int getDisposableCupsNeeded() {
         return disposableCups;
     }
 
-    public int getMoney() {
+    public int getMoneyNeeded() {
         return money;
     }
 }
